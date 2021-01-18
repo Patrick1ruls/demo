@@ -1,10 +1,12 @@
 package com.example.demo;
 
-import com.sun.tools.javac.util.Assert;
+
 import org.junit.jupiter.api.Test;
 import org.kie.api.runtime.KieSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import static org.junit.Assert.*;
 
 @SpringBootTest
 class DemoApplicationTests {
@@ -25,37 +27,37 @@ class DemoApplicationTests {
 	 */
 	@Test
 	void personStateHasInitialValue() {
-		Assert.check(new Person().getState().equals(""));
+		assertEquals("", new Person().getState());
 	}
 
 	@Test
 	void personCreditScoreHasInitialValue() {
-		Assert.check(new Person().getCreditScore() == 0);
+		assertEquals(0, new Person().getCreditScore());
 	}
 
 	@Test
 	void personNotNull() {
-		Assert.checkNonNull(new Order().getPerson());
+		assertNotNull(new Order().getPerson());
 	}
 
 	@Test
 	void productNameHasInitialValue() {
-		Assert.check(new Product().getName().equals(""));
+		assertEquals("", new Product().getName());
 	}
 
 	@Test
 	void productInterestRateStartsAt5() {
-		Assert.check(new Product().getInterestRate() == 5.0);
+		assertEquals(5.0, new Product().getInterestRate(), 0.0);
 	}
 
 	@Test
 	void initialProductIsNotDisqualified() {
-		Assert.check(!new Order().getProduct().isDisqualified());
+		assertFalse(new Order().getProduct().isDisqualified());
 	}
 
 	@Test
 	void productNotNull() {
-		Assert.checkNonNull(new Order().getProduct());
+		assertNotNull(new Order().getProduct());
 	}
 
 	@Test
@@ -63,9 +65,9 @@ class DemoApplicationTests {
 		Order order = new Order();
 		session.insert(order);
 		session.fireAllRules();
-		Assert.check(order.getProduct().getName().equals(""));
-		Assert.check(order.getProduct().getInterestRate() == 5.5); // Assumes person has creditScore of 0
-		Assert.check(!order.getProduct().isDisqualified());
+		assertEquals("", order.getProduct().getName());
+		assertEquals(5.5, order.getProduct().getInterestRate(), 0.0); // Assumes person has creditScore of 0
+		assertFalse(order.getProduct().isDisqualified());
 	}
 
 	/**
@@ -77,7 +79,7 @@ class DemoApplicationTests {
 		Order order = new Order().setProduct(new Product()).setPerson(new Person().setCreditScore(719));
 		session.insert(order);
 		session.fireAllRules();
-		Assert.check(order.getProduct().getInterestRate() == 5.5);
+		assertEquals(5.5, order.getProduct().getInterestRate(), 0.0);
 	}
 
 	@Test
@@ -85,7 +87,7 @@ class DemoApplicationTests {
 		Order order = new Order().setProduct(new Product()).setPerson(new Person().setCreditScore(720));
 		session.insert(order);
 		session.fireAllRules();
-		Assert.check(order.getProduct().getInterestRate() == 4.7);
+		assertEquals(4.7, order.getProduct().getInterestRate(), 0.0);
 	}
 
 	@Test
@@ -93,7 +95,7 @@ class DemoApplicationTests {
 		Order order = new Order().setPerson(new Person().setState("FL"));
 		session.insert(order);
 		session.fireAllRules();
-		Assert.check(order.getProduct().isDisqualified());
+		assertTrue(order.getProduct().isDisqualified());
 	}
 
 	@Test
@@ -101,8 +103,8 @@ class DemoApplicationTests {
 		Order order = new Order().setProduct(new Product().setName("7-1 ARM")).setPerson(new Person().setCreditScore(720));
 		session.insert(order);
 		session.fireAllRules();
-		Assert.check(order.getProduct().getInterestRate() == 5.2);
-		Assert.check(order.getProduct().getName().equals("7-1 ARM"));
+		assertEquals(5.2, order.getProduct().getInterestRate(), 0.0);
+		assertEquals("7-1 ARM", order.getProduct().getName());
 	}
 
 	@Test
@@ -110,8 +112,8 @@ class DemoApplicationTests {
 		Order order = new Order().setProduct(new Product().setName("7-1 ARM")).setPerson(new Person().setCreditScore(600));
 		session.insert(order);
 		session.fireAllRules();
-		Assert.check(order.getProduct().getInterestRate() == 6.0);
-		Assert.check(order.getProduct().getName().equals("7-1 ARM"));
+		assertEquals(6.0, order.getProduct().getInterestRate(), 0.0);
+		assertEquals("7-1 ARM", order.getProduct().getName());
 	}
 
 	@Test
@@ -119,9 +121,9 @@ class DemoApplicationTests {
 		Order order = new Order().setProduct(new Product().setName("7-1 ARM")).setPerson(new Person().setCreditScore(600).setState("FL"));
 		session.insert(order);
 		session.fireAllRules();
-		Assert.check(order.getProduct().getInterestRate() == 6.0);
-		Assert.check(order.getProduct().getName().equals("7-1 ARM"));
-		Assert.check(order.getProduct().isDisqualified());
+		assertEquals(6.0, order.getProduct().getInterestRate(), 0.0);
+		assertEquals("7-1 ARM", order.getProduct().getName());
+		assertTrue(order.getProduct().isDisqualified());
 	}
 
 	@Test
@@ -129,7 +131,7 @@ class DemoApplicationTests {
 		Order order = new Order().setPerson(new Person().setState("TX"));
 		session.insert(order);
 		session.fireAllRules();
-		Assert.check(!order.getProduct().isDisqualified());
+		assertFalse(order.getProduct().isDisqualified());
 	}
 
 }
